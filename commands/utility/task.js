@@ -36,7 +36,7 @@ module.exports = {
     if (sub === "add") {
       const task = interaction.options.getString("task");
       addTask(userId, task);
-      return interaction.reply(`✅ Task added: ${task}`);
+      return interaction.reply(`Task added: ${task}`);
     }
 
     if (sub === "list") {
