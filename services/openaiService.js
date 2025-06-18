@@ -1,8 +1,8 @@
 const { OpenAI } = require("openai");
-require("dotenv").config();
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
+const { OPENAI_API_KEY } = require("../config.json");
+const openai = new OpenAI({
+  apiKey: OPENAI_API_KEY,
+});
 async function generateCompletion(prompt) {
   const completion = await openai.chat.completions.create({
     model: "gpt-4",
