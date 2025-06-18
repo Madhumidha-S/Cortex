@@ -1,4 +1,5 @@
 const tasks = {};
+const completedTask = {};
 
 function addTask(userId, task) {
   if (!tasks[userId]) tasks[userId] = [];
@@ -14,7 +15,13 @@ function completeTask(userId, index) {
     return "Invalid task number.";
   }
   const done = tasks[userId].splice(index, 1);
+  if (!completedTask[userId]) completedTask[userId] = [];
+  completedTask[userId].push(done[0]);
   return `Completed task: ${done[0]}`;
 }
 
-module.exports = { addTask, listTasks, completeTask };
+function finishedTask(userId) {
+  return completedTask[userId] || [];
+}
+
+module.exports = { addTask, listTasks, completeTask, finishedTask };

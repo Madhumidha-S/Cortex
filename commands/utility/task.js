@@ -3,6 +3,7 @@ const {
   addTask,
   listTasks,
   completeTask,
+  finishedTask,
 } = require("../../services/taskService");
 
 module.exports = {
@@ -27,6 +28,9 @@ module.exports = {
         .addIntegerOption((opt) =>
           opt.setName("index").setDescription("Task number").setRequired(true)
         )
+    )
+    .addSubcommand((cmd) =>
+      cmd.setName("finished").setDescription("List all finished tasks")
     ),
 
   async execute(interaction) {
@@ -44,7 +48,7 @@ module.exports = {
       return interaction.reply(
         tasks.length
           ? tasks.map((t, i) => `${i + 1}. ${t}`).join("\n")
-          : "No tasks."
+          : "No pending tasks."
       );
     }
 
@@ -52,6 +56,15 @@ module.exports = {
       const index = interaction.options.getInteger("index");
       const result = completeTask(userId, index - 1);
       return interaction.reply(result);
+    }
+
+    if (sub === "finished") {
+      const finishedTasks = finishedTask(userId);
+      return interaction.reply(
+        finishedTasks.length
+          ? finishedTasks.map((t, i) => `${i + 1}. ${t}`).join("\n")
+          : "No finished tasks."
+      );
     }
   },
 };

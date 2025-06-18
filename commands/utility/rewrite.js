@@ -3,24 +3,24 @@ const { generateCompletion } = require("../../services/openaiService");
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName("explain")
-    .setDescription("Explain a code snippet")
+    .setName("rewrite")
+    .setDescription("Rewrite your code for readability or best practices")
     .addStringOption((opt) =>
-      opt.setName("code").setDescription("Paste your code").setRequired(true)
+      opt.setName("code").setDescription("Code to rewrite").setRequired(true)
     ),
 
   async execute(interaction) {
     const code = interaction.options.getString("code");
-    const prompt = `Explain this code clearly and simply:\n\n${code}`;
+    const prompt = `Rewrite the following code to make it cleaner and follow best practices:\n\n${code}`;
 
     try {
       await interaction.deferReply();
       const response = await generateCompletion(prompt);
       await interaction.editReply(response);
     } catch (err) {
-      console.error("Error in /explain:", err);
+      console.error("Error in /rewrite:", err);
       await interaction.editReply(
-        "Something went wrong while explaining the code."
+        "Something went wrong while rewriting the code."
       );
     }
   },
