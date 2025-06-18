@@ -7,11 +7,24 @@ module.exports = {
     .setDescription("Explain a code snippet")
     .addStringOption((opt) =>
       opt.setName("code").setDescription("Paste your code").setRequired(true)
+    )
+    .addStringOption((opt) =>
+      opt
+        .setName("language")
+        .setDescription("Language of the code (optional)")
+        .setRequired(false)
     ),
 
   async execute(interaction) {
     const code = interaction.options.getString("code");
-    const prompt = `Explain this code clearly and simply:\n\n${code}`;
+    const language = interaction.options.getString("language") || "auto";
+    const prompt = `You're an expert software engineer. Analyze and explain the following code in simple, clear language. Format the output using Markdown.
+    Language: ${language}
+    Code:
+    \`\`\`${language}
+    ${code}
+    \`\`\`
+    `;
 
     try {
       await interaction.deferReply();
