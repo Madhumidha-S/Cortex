@@ -1,27 +1,39 @@
-const tasks = {};
-const completedTask = {};
+const pool = require("./database");
+const { getOrCreateUser } = require("./userService");
 
-function addTask(userId, task) {
-  if (!tasks[userId]) tasks[userId] = [];
-  tasks[userId].push(task);
+async function addTask(discord_id, description) {
+  const user = await getOrCreateUser(discord_id);
+  await pool.query("INSERT INTO tasks (user_id, description) VALUES ($1, $2)", [
+    user.id,
+    description,
+  ]);
 }
 
-function listTasks(userId) {
-  return tasks[userId] || [];
+async function listTasks(discord_id) {
+  const user = await getOrCreateUser(discord_id);
+  const res = await pool.query(
+    "SELECT id, description, is_completed FROM tasks WHERE user_id = $1 AND is_completed = false",
+    [user.id]
+  );
+  return res.rows;
 }
 
-function completeTask(userId, index) {
-  if (!tasks[userId] || index < 0 || index >= tasks[userId].length) {
-    return "Invalid task number.";
-  }
-  const done = tasks[userId].splice(index, 1);
-  if (!completedTask[userId]) completedTask[userId] = [];
-  completedTask[userId].push(done[0]);
-  return `Completed task: ${done[0]}`;
+async function completeTask(discord_id, taskId) {
+  const user = await getOrCreateUser(discord_id);
+  const result = await pool.query(
+    "UPDATE tasks SET is_completed = true WHERE id = $1 AND user_id = $2 RETURNING *",
+    [taskId, user.id]
+  );
+  return result.rowCount > 0 ? "Task completed!" : "Task not found.";
 }
 
-function finishedTask(userId) {
-  return completedTask[userId] || [];
+async function listCompletedTasks(discord_id) {
+  const user = await getOrCreateUser(discord_id);
+  const res = await pool.query(
+    "SELECT id, description FROM tasks WHERE user_id = $1 AND is_completed = true",
+    [user.id]
+  );
+  return res.rows;
 }
 
-module.exports = { addTask, listTasks, completeTask, finishedTask };
+module.exports = { addTask, listTasks, completeTask, listCompletedTasks };

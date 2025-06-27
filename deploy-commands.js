@@ -5,7 +5,9 @@ const path = require("node:path");
 
 const commands = [];
 const foldersPath = path.join(__dirname, "commands");
-const commandFolders = fs.readdirSync(foldersPath);
+const commandFolders = fs
+  .readdirSync(foldersPath)
+  .filter((folder) => fs.lstatSync(path.join(foldersPath, folder)).isDirectory());
 
 for (const folder of commandFolders) {
   const commandsPath = path.join(foldersPath, folder);
@@ -33,7 +35,7 @@ const rest = new REST().setToken(token);
       `Started refreshing ${commands.length} application (/) commands.`
     );
     const data = await rest.put(
-      Routes.applicationGuildCommands(clientId, guildId),
+      Routes.applicationCommands(clientId, guildId),
       { body: commands }
     );
     console.log(

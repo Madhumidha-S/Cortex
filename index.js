@@ -15,7 +15,13 @@ const client = new Client({
 client.commands = new Collection();
 client.cooldowns = new Collection();
 const foldersPath = path.join(__dirname, "commands");
-const commandFolders = fs.readdirSync(foldersPath);
+// const commandFolders = fs.readdirSync(foldersPath);
+
+const commandFolders = fs
+  .readdirSync("./commands")
+  .filter((folder) =>
+    fs.lstatSync(path.join("./commands", folder)).isDirectory()
+  );
 
 for (const folder of commandFolders) {
   const commandsPath = path.join(foldersPath, folder);
