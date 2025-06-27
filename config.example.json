@@ -1,0 +1,13 @@
+{
+  "token": "YOUR_DISCORD_BOT_TOKEN_HERE",
+  "clientId": "YOUR_DISCORD_CLIENT_ID_HERE",
+  "guildId": "YOUR_GUILD_ID_HERE",
+  "togetherApiKey": "YOUR_API_KEY_HERE",
+  "db": {
+    "host": "YOUR_DB_HOST",
+    "port": "YOUR_DB_PORT",
+    "name": "YOUR_DB_NAME",
+    "user": "YOUR_DB_USER",
+    "password": "YOUR_DB_PASSWORD"
+  }
+}
