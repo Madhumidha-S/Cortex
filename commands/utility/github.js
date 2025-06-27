@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require("discord.js");
 const axios = require("axios");
-const { generateCompletion } = require("../../services/openaiService");
+const { generateCompletion } = require("../../services/togetherAIService");
 
 module.exports = {
   data: new SlashCommandBuilder()

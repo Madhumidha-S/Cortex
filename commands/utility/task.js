@@ -67,7 +67,9 @@ module.exports = {
       try {
         const result = await listTasks(userId);
         if (result.length > 0) {
-          const formatted = result.map((t, i) => `${i + 1}. ${t.description}`).join("\n");
+          const formatted = result
+            .map((t, i) => `${i + 1}. ${t.description}`)
+            .join("\n");
           return interaction.reply({
             content: `Pending Tasks:\n\n${formatted}`,
             ephemeral: true,

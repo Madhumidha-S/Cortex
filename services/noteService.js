@@ -24,6 +24,8 @@ async function deleteNote(discord_id, noteID) {
     "DELETE FROM notes WHERE id = $1 AND user_id = $2 RETURNING *",
     [noteID, user.id]
   );
-  return result.rowCount > 0 ? "Note deleted!" : "You have no saved notes. Use `/note add` to create one!";
+  return result.rowCount > 0
+    ? "Note deleted!"
+    : "You have no saved notes. Use `/note add` to create one!";
 }
 module.exports = { addNote, getNotes, deleteNote };
